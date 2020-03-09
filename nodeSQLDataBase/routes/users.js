@@ -5,7 +5,7 @@ const router= express.Router();
 /* getters */
 router.get("/", usersController.viewAll);
 router.get("/:id([0-9]*)", usersController.viewById); // get by id
-//router.get("/filter/", tasksController.viewByFilter); // get by filter thx to Damian
+//router.get("/tasksXuser/", usersController.viewTasksUser); // get tasks and users
 
 /* postters */
 router.post("/", usersController.addNewData); // by body - parser
