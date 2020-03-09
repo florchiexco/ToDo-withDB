@@ -1,16 +1,19 @@
 const express = require("express");
+const usersController= require("../controller/user.js");
+const router= express.Router();
 
-const fs = require("fs");
+/* getters */
+router.get("/", usersController.viewAll);
+router.get("/:id([0-9]*)", usersController.viewById); // get by id
+//router.get("/filter/", tasksController.viewByFilter); // get by filter thx to Damian
 
-const router = express.Router();
+/* postters */
+router.post("/", usersController.addNewData); // by body - parser
 
-router.get("/", (req, res) =>
-  fs.readFile("server/users.json", (err, data) => {
-    res.json(JSON.parse(data));
-  })
-);
+/* deletters */
+router.delete("/:id", usersController.deleteById);
 
-router.post("/", (req, res) => res.json({ message: "users post" }));
-router.post("/:id", (req, res) => res.json({ message: "users id" }));
+/* updatters */
+router.put("/", usersController.upgrade); // by body - parser
 
 module.exports = router;
