@@ -22,7 +22,7 @@ const ListsContainer = ({ tasks, editTask, changeTaskStatus, deleteTask }) => {
             onDeleteTask={deleteTask}
           />
         ) : (
-          <h3> Muy bien!! No tienes tareas pendientes </h3>
+          <h3> No hay tareas pendientes </h3>
         )}
       </div>
       {doneTasks().length > 0 ? (

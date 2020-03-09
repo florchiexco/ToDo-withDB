@@ -36,14 +36,12 @@ const viewById = (req, res) => {
 const addNewData = (req, res) => {
   const data = req.body;
   let sql =
-    "INSERT INTO " + tableName + " (mail, pass, name, idTask) VALUES ('" +
+    "INSERT INTO " + tableName + " (mail, pass, name) VALUES ('" +
     data.mail +
     "', '" +
     data.pass +
     "', '" +
     data.name +
-    "', '" +
-    data.idTask +
     "')";
 
   db.query(sql, err => {
@@ -76,8 +74,6 @@ const upgrade = (req, res) => {
     data.pass +
     "', name = '" +
     data.name +
-    "', idTask = '" +
-    data.idTask +
     "' WHERE id =" +
     data.id +
     ";";
