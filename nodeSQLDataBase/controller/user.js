@@ -13,40 +13,21 @@ const viewAll = (req, res) => {
 
 //Al pasarle un id a la url obtenemos una sola de nuestras filas
 const viewById = (req, res) => {
-  let sql = "SELECT * FROM " + tableName + " WHERE id=" + req.params.id + ";";
-  db.query(sql, (err, rows) => {
+  let sql = "SELECT * FROM " + tableName + " WHERE id= ? ;";
+  db.query(sql, [req.params.id], (err, rows) => {
     if (err) throw err;
     res.json(rows);
   });
 };
 
-// const viewByFilter = (req, res) => {
-//   console.log(req.query);
-//   let filtros = `isDone = '${req.query.isDone}'`;
-//   let sql = "SELECT * FROM " + tableName + " WHERE " + filtros + ";";
-//   db.query(sql, (err, rows) => {
-//     if (err) throw err;
-//     res.json(rows);
-//   });
-// };
-
 /* Consultas a la base de datos por medio de un POST */
 
 //Agregar una nueva fila por medio del body-parser
 const addNewData = (req, res) => {
-  const data = req.body;
-  let sql =
-    "INSERT INTO " + tableName + " (mail, pass, name) VALUES ('" +
-    data.mail +
-    "', '" +
-    data.pass +
-    "', '" +
-    data.name +
-    "')";
-
-  db.query(sql, err => {
+  let sql = "INSERT INTO " + tableName + " (mail, pass, name) VALUES (?, ?, ?)";
+    db.query(sql, [req.body.mail, req.body.pass, req.body.name], err => {
     if (err) throw err;
-    res.json(data);
+    res.json(req.body);
   });
 };
 
@@ -54,9 +35,8 @@ const addNewData = (req, res) => {
 
 // esta consulta elimina una fila mediante el id que se le pasa por la url
 const deleteById = (req, res) => {
-  let sql = "DELETE FROM " + tableName + " WHERE id=" + req.params.id + ";";
-
-  db.query(sql, (error, results) => {
+  let sql = "DELETE FROM " + tableName + " WHERE id= ? ;";
+  db.query(sql, [req.params.id], (error, results) => {
     if (error) return console.error(error.message);
     res.json(results.affectedRows);
   });
@@ -68,16 +48,8 @@ const deleteById = (req, res) => {
 const upgrade = (req, res) => {
   const data = req.body;
   let sql =
-    "UPDATE " +tableName+  " SET mail = '" +
-    data.mail +
-    "', pass = '" +
-    data.pass +
-    "', name = '" +
-    data.name +
-    "' WHERE id =" +
-    data.id +
-    ";";
-  db.query(sql, function(err, result) {
+    "UPDATE " +tableName+  " SET mail = ? , pass = ? , name = ?  WHERE id = ? ;";
+  db.query(sql, [req.body.mail, req.body.pass, req.body.name, req.body.id], function(err, result) {
     if (err) throw err;
     res.json(result.affectedRows);
   });
@@ -86,7 +58,6 @@ const upgrade = (req, res) => {
 module.exports = {
   viewAll,
   viewById,
-  //viewByFilter,
   addNewData,
   deleteById,
   upgrade
