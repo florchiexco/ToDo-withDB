@@ -68,11 +68,55 @@ const upgrade = (req, res) => {
   });
 };
 
+  //Devuelve nombre e id de un usuario asignado a cierta tarea en particular
+
+  const getUserAssigned= (req, res) => {
+    const data= req.params;
+    let sql= "SELECT u.id AS UserID, u.name AS Usuario FROM users AS u INNER JOIN tasksXuser AS txu ON u.id=txu.idUser WHERE txu.idTask=?;"
+    db.query(sql, [data.id], function(err, rows){
+      if(err) throw err;
+      res.json(rows);
+    })
+   }
+
+   //Se muestran titulo, descripcion y dueño de las tareas que tienen un usuario asignado
+   const viewAllAssigned = (req, res) => {
+    let sql= "SELECT t.title AS Tarea, t.description AS Descripcion, u.name AS 'Asignada a' FROM tasks AS t INNER JOIN users AS u INNER JOIN tasksXuser AS txu ON t.id=idTask && u.id=txu.idUser;";
+    db.query(sql, (err, rows) => {
+    if (err) throw err;
+    res.json(rows);
+  });
+  };
+
+  //Asigna un usuario a una tarea
+  const assign = (req, res) => {
+    const data = req.params;
+    let sql = "INSERT INTO tasksXuser (idTask, idUser) VALUES (?,?);";
+    db.query(sql, [data.id, data.userID], function(err, result) {
+      if (err) throw err;
+      res.json(result.affectedRows);
+    });
+  };
+
+  //Desasigna a un usuario en particular de cierta tarea
+  const unassign= (req, res) => {
+    const data= req.params;
+    let sql= "UPDATE tasksXuser SET idUser= NULL WHERE idTask=? && idUser=?;";
+    db.query(sql, [data.id, data.userID], function(err, result){
+      if(err) throw err;
+      res.json(result.affectedRows);
+    });
+  };
+
 module.exports = {
   viewAll,
   viewById,
   viewByFilter,
   addNewData,
   deleteById,
-  upgrade
+  upgrade,
+  getUserAssigned,
+  assign,
+  viewAllAssigned,
+  unassign
 };

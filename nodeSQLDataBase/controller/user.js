@@ -55,11 +55,21 @@ const upgrade = (req, res) => {
   });
 };
 
+  //Devuelve con su titulo, descripcion  las tareas de una persona en especifico
+  const getAssigned = (req, res) => {
+    let sql= "SELECT t.title AS Tarea, t.description AS Descripcion, u.name AS Autor FROM tasks AS t INNER JOIN users AS u INNER JOIN tasksXuser AS txu ON t.id=idTask && u.id=txu.idUser WHERE u.id = ? ;";
+    db.query(sql, [req.params.id], function(err, rows){
+    if(err) throw err;
+    res.json(rows);
+  });
+};
+
 
 module.exports = {
   viewAll,
   viewById,
   addNewData,
   deleteById,
-  upgrade
+  upgrade,
+  getAssigned
 };
