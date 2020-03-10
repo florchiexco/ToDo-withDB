@@ -30,9 +30,9 @@ const App = () => {
 
   //Hooks en los que se setea los estados, form y tasks
   const [tasks, setTasks] = useState([]);
-  const [users, setUsers] = useState([]);
   const [form, setForm] = useState(initialFormState);
   const [signIn, setSignIn] = useState(initialSignInState);
+
 
   const handleChange = e => {
     const value = e.target.value;
@@ -66,25 +66,16 @@ const App = () => {
   const handleSubmitSignIn = e => {
     e.preventDefault();
     const { mail, pass, name } = signIn;
-    if (signIn.id) {
-      const newUsers = users.map(user => (user.id === signIn.id ? signIn : user));
-      setUsers(newUsers);
-      setSignIn(initialSignInState);
-      //editTodos(form.id, form.title, form.description);
-    } else if (mail && pass && name) {
+    if (mail && pass && name) {
       const user = {
         mail,
         pass,
         name
       };
       saveUsers(user.mail, user.pass, user.name);
-      setUsers([...users, user]);
       setSignIn(initialSignInState);
     }
   };
-  useEffect(()=>{
-    getUsers().then(data=>setUsers(data));
-  }, []);
 
   const handleChangeSignIn = e => {
     const value = e.target.value;
@@ -104,10 +95,6 @@ const App = () => {
     setForm(task);
   };
 
-  const editUser= user=>{
-    setSignIn(user);
-  };
-
   //Hace un delete de cierto task con el id de parametro, luego vuelve a setear el estado actualizado
   const deleteTask = async task => {
     await deleteTodos(task.id).then(() =>
@@ -115,11 +102,7 @@ const App = () => {
     );
   };
 
-  const deleteUser = async user => {
-    await deleteUser(user.id).then(() =>
-      getUsers().then(data => setUsers(data))
-    );
-  };
+
 
   return (
     <div className="container">
