@@ -91,6 +91,7 @@ const App = () => {
       getTodos().then(data => setTasks(data))
     );
   };
+  
   const editTask = task => {
     setForm(task);
   };
